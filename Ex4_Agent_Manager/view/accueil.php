@@ -1,11 +1,23 @@
 <?php
 session_start();
 
+include_once '../database.php';
+
 if(!isset($_SESSION["compte"])){
     header('Location:index.php');
     exit;
 }
-$roles = [1 => "Admin", 2 => "Agent"];
+function find_manager(){
+    try {
+        $bdd = connect_bdd();
+        $sql = "SELECT  `firstname`, `lastname`, `email`, `created_at` AS createdAt, `Id_Role` AS `role`  FROM `users` WHERE  `Id_Role`=2";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute();
+       return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException) {
+        return false;
+    }
+}
 
 include 'header.php';
 ?>
@@ -13,7 +25,7 @@ include 'header.php';
         <h1>Accueil</h1>
 
         <section class="panneau" aria-labelledby="titre-utilisateurs">
-            <h2 id="titre-utilisateurs">Les autres utilisateurs</h2>
+            <h2 id="titre-utilisateurs">Les autres manager</h2>
 
             <div class="tableau-defilant">
                 <table>
@@ -27,27 +39,24 @@ include 'header.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($_SESSION["agents"])): ?>
-                            <?php foreach ($_SESSION["agents"] as $key => $ag): ?>
+                        <?php if (find_manager()): ?>
+                            <?php foreach (find_manager() as $key => $ag): ?>
                                 <tr>
                                     <td><?= htmlspecialchars($ag["firstname"]) ?></td>
                                     <td><?= htmlspecialchars($ag["lastname"]) ?></td>
                                     <td><?= htmlspecialchars($ag["email"]) ?></td>
-                                    <td><?= htmlspecialchars($ag["id_role"] == 2 ? "Manager" : "Erreur") ?></td>
-                                    <td><?= htmlspecialchars($ag["create_at"]) ?></td>
+                                    <td><?= htmlspecialchars($ag["role"] == 2 ? "Manager" : "Erreur") ?></td>
+                                    <td><?= htmlspecialchars($ag["createdAt"]) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="5">Aucun agent enregistré</td>
+                                <td colspan="5">Aucun manager enregistré</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
             </div>
-
-            <!-- À afficher quand il n'y a aucun autre utilisateur -->
-            <p class="vide">Il n'y a pas encore d'autre utilisateur.</p>
         </section>
     </main>
 </body>

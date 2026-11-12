@@ -15,9 +15,16 @@ function traitement(): string {
     if (empty($_POST["name"]) || empty($_POST["date"]) || empty($_POST["archetype"]) || empty($_POST["tier"])) {
         return "Veuillez remplir tous les champs";
     }
+    
+    $_POST["name"]=trim($_POST["name"]);
+    $_POST["date"]=trim($_POST["date"]);
+    $_POST["archetype"]=trim( $_POST["archetype"]);
+    $_POST["tier"]=trim($_POST["tier"]);
+    
     if (false === add_agent($_POST)) {
         return "Le compte n'a pas pu être ajouté en BDD";
     }
+    
     return "Enregistrement réussi";
 }
 
@@ -63,8 +70,8 @@ function add_agent(array $user): bool {
 
         $stmt->bindValue(1, $user["name"], PDO::PARAM_STR);
         $stmt->bindValue(2, $user["date"], PDO::PARAM_STR);
-        $stmt->bindValue(3, (int) $user["archetype"], PDO::PARAM_INT);
-        $stmt->bindValue(4, (int) $user["tier"], PDO::PARAM_INT);
+        $stmt->bindValue(3, $user["archetype"], PDO::PARAM_INT);
+        $stmt->bindValue(4, $user["tier"], PDO::PARAM_INT);
         $stmt->bindValue(5, $team, $team === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
 
         return $stmt->execute();
@@ -76,14 +83,14 @@ function add_agent(array $user): bool {
 function find_agent(){
     try {
         $sql = "SELECT ag.`Id_Agent`, ag.`name`, ar.`archetype`, t.`tier`, tea.`team_name`, GROUP_CONCAT(ab.`ability` SEPARATOR ', ') AS abilities
-                FROM `agents` AS ag
-                INNER JOIN `tiers` AS t ON ag.`Id_Tier` = t.`Id_Tier`
-                INNER JOIN `archetypes` AS ar ON ag.`Id_Archetype` = ar.`Id_Archetype`
-                LEFT JOIN `teams` AS tea ON ag.`Id_Team` = tea.`Id_Team`
-                LEFT JOIN `archetypes_abilities` AS p ON ar.`Id_Archetype` = p.`Id_Archetype`
-                LEFT JOIN `abilities` AS ab ON p.`Id_Ability` = ab.`Id_Ability`
-                GROUP BY ag.`Id_Agent`
-                ORDER BY ag.`Id_Agent`";
+            FROM `agents` AS ag
+            INNER JOIN `tiers` AS t ON ag.`Id_Tier` = t.`Id_Tier`
+            INNER JOIN `archetypes` AS ar ON ag.`Id_Archetype` = ar.`Id_Archetype`
+            LEFT JOIN `teams` AS tea ON ag.`Id_Team` = tea.`Id_Team`
+            LEFT JOIN `archetypes_abilities` AS p ON ar.`Id_Archetype` = p.`Id_Archetype`
+            LEFT JOIN `abilities` AS ab ON p.`Id_Ability` = ab.`Id_Ability`
+            GROUP BY ag.`Id_Agent`
+            ORDER BY ag.`Id_Agent`";
         $stmt = connect_bdd()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

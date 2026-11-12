@@ -49,15 +49,14 @@ function traitement(): string
 function find_user_by_email(string $email): bool
 {
     try {
-        $sql = "SELECT u.id FROM `user` AS u WHERE u.email = ?";
+        $sql = "SELECT u.Id_user FROM `users` AS u WHERE u.email = ?";
         $stmt = connect_bdd()->prepare($sql);
         $stmt->bindParam(1, $email, PDO::PARAM_STR);
         $stmt->execute();
-        $user = $stmt->fetch();
+        return $stmt->fetch();
     } catch (PDOException $e) {
         return false;
     }
-    return $user;
 }
 function add_user(array $user): string|int|bool
 {
