@@ -53,7 +53,7 @@ function find_user_by_email(string $email): bool
         $stmt = connect_bdd()->prepare($sql);
         $stmt->bindParam(1, $email, PDO::PARAM_STR);
         $stmt->execute();
-        return $stmt->fetch();
+        return $stmt->fetch() !== false;
     } catch (PDOException $e) {
         return false;
     }

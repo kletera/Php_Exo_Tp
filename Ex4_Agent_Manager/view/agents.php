@@ -21,6 +21,10 @@ function traitement(): string {
     $_POST["archetype"]=trim( $_POST["archetype"]);
     $_POST["tier"]=trim($_POST["tier"]);
     
+    if(find_agent_by_name($_POST["name"])){
+        return "Ce nom est déja utiliser";
+    }
+
     if (false === add_agent($_POST)) {
         return "Le compte n'a pas pu être ajouté en BDD";
     }
@@ -59,6 +63,19 @@ function find_teams(){
         return [];
     }
 }
+
+function find_agent_by_name(string $name):bool{
+    try {
+        $sql = "SELECT a.Id_agent FROM `agents` AS a WHERE a.`name` = ?" ;
+        $stmt = connect_bdd()->prepare($sql);
+        $stmt->bindParam(1, $name, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch() !== false;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
 
 function add_agent(array $user): bool {
     try {
