@@ -1,123 +1,124 @@
 <?php
-include_once '../database.php';
-session_start();
+class ViewAgents{
+    // Atribut
+    private string $msg;
+    private array $findTiers;
+    private array $findArchetype;
+    private array $findTeams;
+    private array $findAgent;
 
-if(!isset($_SESSION["compte"])){
-    header('Location:index.php');
-    exit;
-}
-$msg="";
-if (isset($_POST["submit"])) {
-    $msg = traitement();
-}
+    // Construct
 
-function traitement(): string {
-    if (empty($_POST["name"]) || empty($_POST["date"]) || empty($_POST["archetype"]) || empty($_POST["tier"])) {
-        return "Veuillez remplir tous les champs";
-    }
-    
-    $_POST["name"]=trim($_POST["name"]);
-    $_POST["date"]=trim($_POST["date"]);
-    $_POST["archetype"]=trim( $_POST["archetype"]);
-    $_POST["tier"]=trim($_POST["tier"]);
-    
-    if(find_agent_by_name($_POST["name"])){
-        return "Ce nom est déja utiliser";
+    // Getter Setter
+    /**
+     * Get the value of msg
+     *
+     * @return string
+     */
+    public function getMsg(): string {
+        return $this->msg;
     }
 
-    if (false === add_agent($_POST)) {
-        return "Le compte n'a pas pu être ajouté en BDD";
+    /**
+     * Set the value of msg
+     *
+     * @param string $msg
+     *
+     * @return self
+     */
+    public function setMsg(string $msg): self {
+        $this->msg = $msg;
+        return $this;
     }
-    
-    return "Enregistrement réussi";
-}
 
-function find_tiers(){
-    try {
-        $sql = "SELECT `Id_Tier`, `tier` FROM `tiers` ORDER BY `Id_Tier`";
-        $stmt = connect_bdd()->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException) {
-        return [];
+    /**
+     * Get the value of findTiers
+     *
+     * @return array
+     */
+    public function getFindTiers(): array {
+        return $this->findTiers;
     }
-}
-function find_archetype(){
-    try {
-        $sql = "SELECT `Id_Archetype`, `archetype` FROM `archetypes` ORDER BY `Id_Archetype`";
-        $stmt = connect_bdd()->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException ) {
-        return [];
+
+    /**
+     * Set the value of findTiers
+     *
+     * @param array $findTiers
+     *
+     * @return self
+     */
+    public function setFindTiers(array $findTiers): self {
+        $this->findTiers = $findTiers;
+        return $this;
     }
-}
 
-function find_teams(){
-    try {
-        $sql = "SELECT `Id_Team`, `team_name` FROM `teams` ORDER BY `Id_Team`";
-        $stmt = connect_bdd()->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException ) {
-        return [];
+    /**
+     * Get the value of findArchetype
+     *
+     * @return array
+     */
+    public function getFindArchetype(): array {
+        return $this->findArchetype;
     }
-}
 
-function find_agent_by_name(string $name):bool{
-    try {
-        $sql = "SELECT a.Id_agent FROM `agents` AS a WHERE a.`name` = ?" ;
-        $stmt = connect_bdd()->prepare($sql);
-        $stmt->bindParam(1, $name, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetch() !== false;
-    } catch (PDOException $e) {
-        return false;
+    /**
+     * Set the value of findArchetype
+     *
+     * @param array $findArchetype
+     *
+     * @return self
+     */
+    public function setFindArchetype(array $findArchetype): self {
+        $this->findArchetype = $findArchetype;
+        return $this;
     }
-}
 
-
-function add_agent(array $user): bool {
-    try {
-        $sql = "INSERT INTO `agents` (`name`, `dob`, `Id_Archetype`, `Id_Tier`, `Id_Team`)
-                VALUES (?, ?, ?, ?, ?)";
-        $stmt = connect_bdd()->prepare($sql);
-
-        $team = ($user["team"] !== "") ? (int) $user["team"] : null;
-
-        $stmt->bindValue(1, $user["name"], PDO::PARAM_STR);
-        $stmt->bindValue(2, $user["date"], PDO::PARAM_STR);
-        $stmt->bindValue(3, $user["archetype"], PDO::PARAM_INT);
-        $stmt->bindValue(4, $user["tier"], PDO::PARAM_INT);
-        $stmt->bindValue(5, $team, $team === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
-
-        return $stmt->execute();
-    } catch (PDOException $e) {
-        return false;
+    /**
+     * Get the value of findTeams
+     *
+     * @return array
+     */
+    public function getFindTeams(): array {
+        return $this->findTeams;
     }
-}
 
-function find_agent(){
-    try {
-        $sql = "SELECT ag.`Id_Agent`, ag.`name`, ar.`archetype`, t.`tier`, tea.`team_name`, GROUP_CONCAT(ab.`ability` SEPARATOR ', ') AS abilities
-            FROM `agents` AS ag
-            INNER JOIN `tiers` AS t ON ag.`Id_Tier` = t.`Id_Tier`
-            INNER JOIN `archetypes` AS ar ON ag.`Id_Archetype` = ar.`Id_Archetype`
-            LEFT JOIN `teams` AS tea ON ag.`Id_Team` = tea.`Id_Team`
-            LEFT JOIN `archetypes_abilities` AS p ON ar.`Id_Archetype` = p.`Id_Archetype`
-            LEFT JOIN `abilities` AS ab ON p.`Id_Ability` = ab.`Id_Ability`
-            GROUP BY ag.`Id_Agent`
-            ORDER BY ag.`Id_Agent`";
-        $stmt = connect_bdd()->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException ) {
-        return [];
+    /**
+     * Set the value of findTeams
+     *
+     * @param array $findTeams
+     *
+     * @return self
+     */
+    public function setFindTeams(array $findTeams): self {
+        $this->findTeams = $findTeams;
+        return $this;
     }
-}
 
+    /**
+     * Get the value of findAgent
+     *
+     * @return array
+     */
+    public function getFindAgent(): array {
+        return $this->findAgent;
+    }
 
-include 'header.php';
+    /**
+     * Set the value of findAgent
+     *
+     * @param array $findAgent
+     *
+     * @return self
+     */
+    public function setFindAgent(array $findAgent): self {
+        $this->findAgent = $findAgent;
+        return $this;
+    }
+
+    // Methode
+    public function display(){
+    include 'ViewHeader.php'; 
+
 ?>
 
     <main>
@@ -141,7 +142,7 @@ include 'header.php';
                     <label for="tier">Rang - level</label>
                     <select name="tier" id="tier" required>
                         <option value="" selected disabled>Choisir un rang - level</option>
-                        <?php foreach (find_tiers() as $key => $tier): ?>
+                        <?php foreach ($this->findTiers as $key => $tier): ?>
                             <option value="<?= htmlspecialchars($tier['Id_Tier']) ?>">
                                 <?= htmlspecialchars($tier['tier']) ?>
                             </option>
@@ -153,7 +154,7 @@ include 'header.php';
                     <label for="archetype">Archétype</label>
                     <select name="archetype" id="archetype" required>
                         <option value="" selected disabled>Choisir un archétype</option>
-                        <?php foreach (find_archetype() as $key => $ar): ?>
+                        <?php foreach ($this->findArchetype as $key => $ar): ?>
                             <option value="<?= htmlspecialchars($ar['Id_Archetype']) ?>">
                                 <?= htmlspecialchars($ar['archetype']) ?>
                             </option>
@@ -165,7 +166,7 @@ include 'header.php';
                     <label for="team">Équipe</label>
                     <select name="team" id="team">
                         <option value="" selected>Aucune équipe</option>
-                        <?php foreach (find_teams() as $key => $team): ?>
+                        <?php foreach ($this->findTeams as $key => $team): ?>
                             <option value="<?= htmlspecialchars($team['Id_Team']) ?>">
                                 <?= htmlspecialchars($team['team_name']) ?>
                             </option>
@@ -195,7 +196,7 @@ include 'header.php';
                     </thead>
 
                     <tbody>
-                        <?php foreach (find_agent() as $key => $agent) : ?>
+                        <?php foreach ($this->findAgent as $key => $agent) : ?>
                             <tr>
                                 <td><?=  htmlspecialchars($agent["name"]) ?></td>
                                 <td><?=  htmlspecialchars($agent["tier"]) ?></td>
@@ -221,3 +222,7 @@ include 'header.php';
     </main>
 </body>
 </html>
+
+<?php
+    }
+}

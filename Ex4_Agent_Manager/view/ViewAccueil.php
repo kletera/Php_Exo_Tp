@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-include_once '../database.php';
 
 if(!isset($_SESSION["compte"])){
     header('Location:index.php');
@@ -18,6 +15,36 @@ function find_manager(){
         return false;
     }
 }
+class ViewAccueil{
+    // Attribut
+    private array $findManager;
+    
+    // Getter Setter
+    /**
+     * Get the value of findManager
+     *
+     * @return array
+     */
+    public function getFindManager(): array {
+        return $this->findManager;
+    }
+
+    /**
+     * Set the value of findManager
+     *
+     * @param array $findManager
+     *
+     * @return self
+     */
+    public function setFindManager(array $findManager): self {
+        $this->findManager = $findManager;
+        return $this;
+    }
+
+
+    // Methode
+    public function dispay(){
+
 
 include 'header.php';
 ?>
@@ -39,8 +66,8 @@ include 'header.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (find_manager()): ?>
-                            <?php foreach (find_manager() as $key => $ag): ?>
+                        <?php if ($this->findManager): ?>
+                            <?php foreach ($this->findManager as $key => $ag): ?>
                                 <tr>
                                     <td><?= htmlspecialchars($ag["firstname"]) ?></td>
                                     <td><?= htmlspecialchars($ag["lastname"]) ?></td>
@@ -61,3 +88,6 @@ include 'header.php';
     </main>
 </body>
 </html>
+<?php
+    }
+}
