@@ -1,20 +1,4 @@
 <?php
-
-if(!isset($_SESSION["compte"])){
-    header('Location:index.php');
-    exit;
-}
-function find_manager(){
-    try {
-        $bdd = connect_bdd();
-        $sql = "SELECT  `firstname`, `lastname`, `email`, `created_at` AS createdAt, `Id_Role` AS `role`  FROM `users` WHERE  `Id_Role`=2";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute();
-       return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException) {
-        return false;
-    }
-}
 class ViewAccueil{
     // Attribut
     private array $findManager;
@@ -45,8 +29,7 @@ class ViewAccueil{
     // Methode
     public function dispay(){
 
-
-include 'header.php';
+    include './view/ViewHeader.php';
 ?>
     <main>
         <h1>Accueil</h1>

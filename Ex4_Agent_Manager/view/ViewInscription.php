@@ -66,7 +66,7 @@ class ViewInscription{
 
         <input type="submit" name="submit" value="Créer un compte">
 
-        <p>Vous avez déjà un compte ? <a href="./view/connexion.php">Connectez-vous</a></p>
+        <p>Vous avez déjà un compte ? <a href="index.php?page=connexion">Connectez-vous</a></p>
     </form>
 </body>
 </html>

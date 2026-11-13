@@ -222,7 +222,7 @@ class ModelInscription {
             "role" => $this->role,
             "createdAt" => (new DateTime())->format('Y-m-d H:i:s'),
         ];
-        header("Location:./view/accueil.php");
+        header("Location:index.php?page=accueil");
         return "Le compte " . $this->email . " a été ajouté avec succés";
     }
 

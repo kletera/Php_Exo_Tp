@@ -1,5 +1,4 @@
 <?php
-
 include './model/ModelInscription.php';
 include './view/ViewInscription.php';
 
@@ -76,4 +75,8 @@ class ControllerInscription{
     }
 }
 
+$model = new ModelInscription(connect_bdd());
+$view = new ViewInscription();
 
+$controller = new ControllerInscription($model, $view);
+$controller->render();

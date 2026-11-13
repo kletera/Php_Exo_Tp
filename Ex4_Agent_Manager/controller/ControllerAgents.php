@@ -79,3 +79,10 @@ class ControllerAgents{
         $this->view->display();
     }
 }
+
+$model= new Agent(connect_bdd());
+
+$view= new ViewAgents();
+
+$ControllerAgents = new ControllerAgents($model,$view);
+$ControllerAgents->render();

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body class="page">
     <header class="entete">
@@ -13,12 +13,12 @@
     
             <nav aria-label="Navigation principale">
                 <ul>
-                    <li><a href="../controller/#">Accueil</a></li>
-                    <li><a href="../controller/ControllerAgents.php">Agents of Shield</a></li>
-                    <li><a href="moncompte.php">Mon profil</a></li>
+                    <li><a href="index.php?page=accueil">Accueil</a></li>
+                    <li><a href="index.php?page=agents">Agents of Shield</a></li>
+                    <li><a href="index.php?page=moncompte">Mon profil</a></li>
                 </ul>
             </nav>
-            <a href="deconexion.php">Déconexion</a>
+            <a href="index.php?page=deconnexion">Déconexion</a>
         </div>
     </header>
 

@@ -1,7 +1,7 @@
 <?php
 class ViewAgents{
     // Atribut
-    private string $msg;
+    private string $msg="";
     private array $findTiers;
     private array $findArchetype;
     private array $findTeams;
@@ -117,7 +117,7 @@ class ViewAgents{
 
     // Methode
     public function display(){
-    include 'ViewHeader.php'; 
+    include './view/ViewHeader.php'; 
 
 ?>
 
@@ -174,7 +174,7 @@ class ViewAgents{
                     </select>
                 </div>
                 
-                <p><?= htmlspecialchars($msg) ?></p>
+                <p><?= htmlspecialchars($this->msg) ?></p>
 
                 <input type="submit" name="submit" value="Inscrire l'agent">
             </form>

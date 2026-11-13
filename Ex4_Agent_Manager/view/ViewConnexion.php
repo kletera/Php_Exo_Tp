@@ -1,39 +1,31 @@
 <?php
+class ViewConnexion{
+    private string $msg="";
 
-include_once '../database.php';
-
-session_start();
-$msg="";
-if (isset($_POST["submit"])) {
-    $msg = traitement();
-}
-
-function traitement(): string
-{
-    $em = strip_tags(trim($_POST["email"]));
-    $pw = strip_tags(trim($_POST["password"]));
-    if (empty($em) || empty($pw)) {
-        return "Veuillez remplir tous les champs";
-    }
-    if (!filter_var($em, FILTER_VALIDATE_EMAIL)) {
-        return "Erreur : email pas au bon format";
+    /**
+     * Get the value of msg
+     *
+     * @return string
+     */
+    public function getMsg(): string {
+        return $this->msg;
     }
 
-    try {
-        $bdd = connect_bdd();
-        $sql = "SELECT  `firstname`, `lastname`, `email`, `created_at` AS createdAt, `Id_Role` AS `role`  FROM `users` WHERE email = ?";
-        $stmt = $bdd->prepare($sql);
-        $stmt->bindValue(1, $em, PDO::PARAM_STR);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException) {
-        return "Erreur technique, réessayez plus tard";
+    /**
+     * Set the value of msg
+     *
+     * @param string $msg
+     *
+     * @return self
+     */
+    public function setMsg(string $msg): self {
+        $this->msg = $msg;
+        return $this;
     }
 
-    $_SESSION["compte"] = $user;
-    header("Location: ./accueil.php");
-    exit;
-}
+    // Methode
+    public function display(){
+
 
 ?>
 
@@ -43,7 +35,7 @@ function traitement(): string
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Connexion</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <form action="" method="post">
@@ -60,8 +52,11 @@ function traitement(): string
         </div>
 
         <input type="submit" name="submit" value="Se connecter">
-        <p><?= htmlspecialchars($msg) ?></p>
-        <p class="lien-secondaire">Pas encore de compte ? <a href="../index.php">Créer un compte</a></p>
+        <p><?= htmlspecialchars($this->msg) ?></p>
+        <p class="lien-secondaire">Pas encore de compte ? <a href="inscription">Créer un compte</a></p>
     </form>
 </body>
 </html>
+<?php
+   }
+}

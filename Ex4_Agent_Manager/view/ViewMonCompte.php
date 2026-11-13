@@ -1,12 +1,9 @@
 <?php
-session_start();
+class ViewMonCompte{
+    // Methode
+    public function display(){
+        include './view/ViewHeader.php'; 
 
-if(!isset($_SESSION["compte"])){
-    header('Location:index.php');
-    exit;
-}
-
- include 'header.php';
 ?>
 
     <main>
@@ -53,3 +50,6 @@ if(!isset($_SESSION["compte"])){
     </main>
 </body>
 </html>
+<?php
+    }
+}
