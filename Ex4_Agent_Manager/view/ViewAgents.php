@@ -2,10 +2,10 @@
 class ViewAgents{
     // Atribut
     private string $msg="";
-    private array $findTiers;
-    private array $findArchetype;
-    private array $findTeams;
-    private array $findAgent;
+    private array $findTiers=[];
+    private array $findArchetype=[];
+    private array $findTeams=[];
+    private array $findAgent=[];
 
     // Construct
 
@@ -117,7 +117,6 @@ class ViewAgents{
 
     // Methode
     public function display(){
-    include './view/ViewHeader.php'; 
 
 ?>
 

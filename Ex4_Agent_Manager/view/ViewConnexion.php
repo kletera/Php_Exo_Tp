@@ -53,7 +53,7 @@ class ViewConnexion{
 
         <input type="submit" name="submit" value="Se connecter">
         <p><?= htmlspecialchars($this->msg) ?></p>
-        <p class="lien-secondaire">Pas encore de compte ? <a href="inscription">Créer un compte</a></p>
+        <p class="lien-secondaire">Pas encore de compte ? <a href="index.php">Créer un compte</a></p>
     </form>
 </body>
 </html>

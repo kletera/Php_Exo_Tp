@@ -2,7 +2,6 @@
 class ViewMonCompte{
     // Methode
     public function display(){
-        include './view/ViewHeader.php'; 
 
 ?>
 

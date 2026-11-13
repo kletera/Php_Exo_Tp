@@ -1,9 +1,40 @@
+<?php
+class ViewHeader{
+    // Attribut
+    private string $title="Accueil";
+    
+    // Getter Setter
+    /**
+     * Get the value of title
+     *
+     * @return string
+     */
+    public function getTitle(): string {
+        return $this->title;
+    }
+
+    /**
+     * Set the value of title
+     *
+     * @param string $title
+     *
+     * @return self
+     */
+    public function setTitle(string $title): self {
+        $this->title = $title;
+        return $this;
+    }
+
+    // Methode
+    public function displayHeader(){
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><?= $this->title ?></title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body class="page">
@@ -21,5 +52,7 @@
             <a href="index.php?page=deconnexion">Déconexion</a>
         </div>
     </header>
-
+<?php
+    }
+}
 

@@ -1,15 +1,18 @@
 <?php
-include './model/ModelAcccueil.php';
+include './model/ModelUsers.php';
 include './view/ViewAccueil.php';
+include './view/ViewHeader.php'; 
 
 class ControllerAcccueil{
-    private ModelAcccueil $model;
+    private ModelUsers $model;
     private ViewAccueil $view;
+    private ViewHeader $viewHead;
 
     // Constructeur
-    public function __construct(ModelAcccueil $model, ViewAccueil $view) {
+    public function __construct(ModelUsers $model, ViewAccueil $view,ViewHeader $viewHead) {
         $this->model = $model;
         $this->view = $view;
+        $this->viewHead = $viewHead;
     }
 
     // Getter Setter
@@ -17,20 +20,20 @@ class ControllerAcccueil{
     /**
      * Get the value of model
      *
-     * @return ModelAcccueil
+     * @return ModelUsers
      */
-    public function getModel(): ModelAcccueil {
+    public function getModel(): ModelUsers {
         return $this->model;
     }
 
     /**
      * Set the value of model
      *
-     * @param ModelAcccueil $model
+     * @param ModelUsers $model
      *
      * @return self
      */
-    public function setModel(ModelAcccueil $model): self {
+    public function setModel(ModelUsers $model): self {
         $this->model = $model;
         return $this;
     }
@@ -56,6 +59,27 @@ class ControllerAcccueil{
         return $this;
     }
 
+    /**
+     * Get the value of viewHead
+     *
+     * @return ViewHeader
+     */
+    public function getViewHead(): ViewHeader {
+        return $this->viewHead;
+    }
+
+    /**
+     * Set the value of viewHead
+     *
+     * @param ViewHeader $viewHead
+     *
+     * @return self
+     */
+    public function setViewHead(ViewHeader $viewHead): self {
+        $this->viewHead = $viewHead;
+        return $this;
+    }
+
     // Methode
 
     public function render(){
@@ -63,14 +87,15 @@ class ControllerAcccueil{
             header('Location:index.php');
             exit;
         }
-        $this->view->setFindManager($this->model->find_manager());
-        $this->view->dispay();
+        $this->viewHead->displayHeader();
+        $this->view->setFindManager($this->model->find_manager())->dispay();
     }
 }
 
-$model= new ModelAcccueil(connect_bdd());
+$model= new ModelUsers(connect_bdd());
 
 $view= new ViewAccueil();
+$viewHead =new ViewHeader();
 
-$ControllerAcccueil = new ControllerAcccueil($model,$view);
+$ControllerAcccueil = new ControllerAcccueil($model,$view,$viewHead);
 $ControllerAcccueil->render();

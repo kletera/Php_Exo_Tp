@@ -1,14 +1,14 @@
 <?php
-include './model/ModelConnexion.php';
+include './model/ModelUsers.php';
 include './view/ViewConnexion.php';
 
 class ControllerConnexion{
     // Attribut
-    private ModelConnexion $model;
+    private ModelUsers $model;
     private ViewConnexion $view;
 
     // Construct
-    public function __construct(ModelConnexion $model,ViewConnexion $view)
+    public function __construct(ModelUsers $model,ViewConnexion $view)
     {
         $this->model=$model;
         $this->view=$view;
@@ -17,20 +17,20 @@ class ControllerConnexion{
     /**
      * Get the value of model
      *
-     * @return ModelConnexion
+     * @return ModelUsers
      */
-    public function getModel(): ModelConnexion {
+    public function getModel(): ModelUsers {
         return $this->model;
     }
 
     /**
      * Set the value of model
      *
-     * @param ModelConnexion $model
+     * @param ModelUsers $model
      *
      * @return self
      */
-    public function setModel(ModelConnexion $model): self {
+    public function setModel(ModelUsers $model): self {
         $this->model = $model;
         return $this;
     }
@@ -57,17 +57,31 @@ class ControllerConnexion{
     }
 
     // Methode
+    function traitement(): string
+    {
+        $_POST["email"] = strip_tags(trim($_POST["email"]));
+        $_POST["password"] = strip_tags(trim($_POST["password"]));
+        if (empty($_POST["email"]) || empty($_POST["password"])) {
+            return "Veuillez remplir tous les champs";
+        }
+        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            return "Erreur : email pas au bon format";
+        }
+
+        $_SESSION["compte"] = $this->model->selectUser();
+        header("Location: index.php?page=accueil");
+        exit;
+    }
 
     public function render(){
         if (isset($_POST["submit"])) {
-            $this->model->setEmail($_POST["email"]);
-            $this->model->setPassword($_POST["password"]);
-            $this->view->setMsg($this->model->traitement());
+
+            $this->view->setMsg($this->traitement());
         }
         $this->view->display();
     }
 }
-$model = new ModelConnexion(connect_bdd());
+$model = new ModelUsers(connect_bdd());
 $view = new ViewConnexion();
 
 $controller = new ControllerConnexion($model, $view);

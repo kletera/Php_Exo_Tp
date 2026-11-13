@@ -29,7 +29,6 @@ class ViewAccueil{
     // Methode
     public function dispay(){
 
-    include './view/ViewHeader.php';
 ?>
     <main>
         <h1>Accueil</h1>
